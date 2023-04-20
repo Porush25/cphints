@@ -4,12 +4,27 @@ import Navbar from "../../components/Navbar";
 import { FloatingLabel, Form, Button } from "react-bootstrap";
 import backendUrl from '../../../src/constants.js';
 import axios from 'axios';
-import jwt_decode from "jwt-decode";
+
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const Contribute = () => {
   const [ipFields, setIPFields] = useState([0]);
   const [num, setNum] = useState(1);
   const [inputValues, setInputValues] = useState([]);
   const qlink = useRef(null);
+  const submitHint = async (data,token) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const resp = await axios.post(
+      `${backendUrl}/hints/`,
+      data
+    );
+    if (resp.status === 201) {
+      return Promise.resolve();
+    } else {
+      return Promise.reject(new Error("Whoops!"));
+    }
+  };
+
   const handleSubmit = async (e) =>{
     e.preventDefault();
     const token = await localStorage.getItem("token");
@@ -21,12 +36,13 @@ const Contribute = () => {
     // use axios
     // console.log(jwt_decode(token));
     // console.log(data);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    const resp = await axios.post(
-      `${backendUrl}/hints/`,
-      data
-    );
-    // console.log(resp);
+    
+    const loginToast = await toast.promise(submitHint(data,token), {
+      pending: "The hint is yet to go through",
+      success: "Your hint has been added sucessfully",
+      error: "Something went wrong",
+    });
+    // console.log(resp.status);
   }
 
   const handleAdd = () => {
@@ -143,6 +159,8 @@ const Contribute = () => {
             </Button>
           </Form>
         </Container>
+        <ToastContainer theme='dark' limit={3}/>
+
       </div>
     </>
   );
