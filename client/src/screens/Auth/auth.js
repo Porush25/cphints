@@ -2,6 +2,7 @@ import React, { useRef, useState, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
 import OtpInput from "react-otp-input";
+import { useNavigate } from "react-router-dom";
 
 import NavBar from "../../components/Navbar";
 import Login from "./Login";
@@ -15,6 +16,7 @@ import Button from "react-bootstrap/Button";
 import sign_up_pic from "../../assets/images/signup.svg";
 import backendUrl from "../../../src/constants.js";
 import axios from "axios";
+import LoadingSpinner from "../../components/loadingComponent";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +38,7 @@ function FormFloatingBasicExample() {
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const navigate = useNavigate();
 
   const handleValidation = () => {
     // console.log(data.password.length);
@@ -145,6 +148,7 @@ function FormFloatingBasicExample() {
       // show a success toast saying "You are successfully registered"
       setbtnDisable(false);
       toast.success("You are successfully registered");
+      navigate("/");
     } else {
       setbtnDisable(false);
       toast.error("Something went wrong in registration");
@@ -316,7 +320,7 @@ function FormFloatingBasicExample() {
                 onClick={handleSubmit}
                 disabled={btnDisable}
               >
-                Submit
+                {btnDisable ? <LoadingSpinner height="20px" /> : "Submit"}
               </Button>{" "}
             </Form>
             <p className="mt-1 text-muted">

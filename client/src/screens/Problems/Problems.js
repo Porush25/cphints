@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import "./Problems.css";
 import axios from "axios";
 import backendUrl from "../../../src/constants.js";
+import { ToastContainer, toast } from "react-toastify";
 // import "~rsuite/dist/rsuite.css";
 // import '~rsuite/styles/index.less';
 
@@ -39,12 +40,19 @@ const Problems = () => {
     };
 
     const getAllProblems = async () => {
-      const resp = await axios.post(`${backendUrl}/questions/`, pageConfig);
-      // console.log(resp.data);
-      setCount(resp.data[0]);
-      setTdata(resp.data[1]);
-      settotalResults(resp.data.totalCount);
-      // console.log(searchQuery);
+      try {
+        const resp = await axios.post(`${backendUrl}/questions/`, pageConfig);
+        // console.log(resp.data);
+        console.log(resp);
+        setCount(resp.data[0]);
+        setTdata(resp.data[1]);
+        settotalResults(resp.data.totalCount);
+        // console.log(searchQuery);
+      } catch (e) {
+        toast.error("Something went wrong on our side");
+        // navigate("/");
+        console.log("error", e);
+      }
     };
     getAllProblems();
   }, [page, limit, search]);
@@ -182,6 +190,7 @@ const Problems = () => {
           </Col>   */}
         </Row>
       </Container>
+      <ToastContainer theme="dark" limit={3} />
     </div>
   );
 };

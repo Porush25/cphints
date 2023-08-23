@@ -12,6 +12,7 @@ import Problems from "./screens/Problems/Problems";
 import Profile from "./screens/Profile/Profile";
 import Hints from "./screens/Hints/Hints";
 import Leaderboard from "./screens/Leaderboard/Leaderboard";
+import { ToastContainer } from "react-bootstrap";
 
 function App() {
   return (
